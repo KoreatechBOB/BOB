@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "778926179634",
+    "firebase_url": "https://bob-project-5ab9a.firebaseio.com",
+    "project_id": "bob-project-5ab9a",
+    "storage_bucket": "bob-project-5ab9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778926179634:android:9186aae4a8d8f091f0432b",
+        "android_client_info": {
+          "package_name": "com.example.bob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778926179634-ree6le2dv6lbj641vlsni3uno3u1ljhh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3MGEGDhEwgSnEUrJVYiIqjImPhkRRMPc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778926179634-ree6le2dv6lbj641vlsni3uno3u1ljhh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
