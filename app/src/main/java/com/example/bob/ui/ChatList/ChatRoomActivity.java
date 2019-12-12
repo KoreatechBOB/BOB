@@ -58,7 +58,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                 ChatDTO chat = new ChatDTO(User_Name, Chat_Enter.getText().toString());
                 databaseReference.child(Room_Name).push().setValue(chat);
                 Chat_Enter.setText("");
-
             }
         });
     }

@@ -92,6 +92,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
                 m_Adapter.add(dataSnapshot.getKey());
+                Room_List.setSelection(m_Adapter.getCount() - 1);
             }
 
             @Override
