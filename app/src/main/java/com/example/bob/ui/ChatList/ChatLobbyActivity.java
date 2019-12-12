@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
 import com.example.bob.ui.FoodStore.FoodStoreActivity;
+import com.example.bob.ui.Rating.RatingActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -126,9 +127,14 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch(item.getItemId()) {
             case R.id.button_foodstore :
-                Intent intent = new Intent(this, FoodStoreActivity.class);
+                intent = new Intent(this, FoodStoreActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.button_rating :
+                intent = new Intent(this, RatingActivity.class);
                 startActivity(intent);
                 break;
         }
