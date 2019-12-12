@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 public class ChatLobbyActivity extends AppCompatActivity {
 
     String User_Name;
-    String Room_Name;
 
     Button Create, Search;
 
@@ -141,6 +140,12 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
     private void ActiviateCreate() {
         Intent intent = new Intent(this, ChatRoomCreateActivity.class);
+        intent.putExtra("UserName", User_Name);
+        startActivity(intent);
+    }
+
+    private void ActiviateSearch() {
+        Intent intent = new Intent(this, ChatRoomSearchActivity.class);
         intent.putExtra("UserName", User_Name);
         startActivity(intent);
     }

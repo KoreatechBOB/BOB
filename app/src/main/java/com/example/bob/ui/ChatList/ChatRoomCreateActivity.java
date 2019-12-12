@@ -43,8 +43,8 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
 
     String[] Hours = new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "17", "!8", "19", "20", "21", "22", "23"};
     String[] Mins = new String[] {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"};
-    String[] Places = new String[] {"수원시, 서울시"};
-    String[] Menus = new String[] {"분식, 양식"};
+    String[] Places = new String[] {"수원시", "서울시"};
+    String[] Menus = new String[] {"분식", "양식"};
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference("Room");
@@ -99,6 +99,8 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
             public void onClick(View v) {
                 if(Name.getText().toString().equals("") || Hour.equals("") || Min.equals("") || Place.equals("") || Menu.equals("") || Date.getText().toString().equals("") || Age_Start.getText().toString().equals("") || Age_End.getText().toString().equals(""))
                     Toast.makeText(getApplicationContext(), "빈 칸이 있습니다.", Toast.LENGTH_SHORT).show();
+                else if(Integer.valueOf(Age_Start.getText().toString()) > Integer.valueOf(Age_End.getText().toString()))
+                    Toast.makeText(getApplicationContext(), "나이 제한이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
                 else {
                     databaseReference.addListenerForSingleValueEvent(checkRoom);
                 }
@@ -185,7 +187,8 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
                     return;
                 }
             }
-            ChatRoomDTO info = new ChatRoomDTO(Name.getText().toString(), Place, Hour, Min, Age_Start.getText().toString(), Age_End.getText().toString(), Menu);
+            getDate();
+            ChatRoomDTO info = new ChatRoomDTO(Name.getText().toString(), Place, Hour, Min, Age_Start.getText().toString(), Age_End.getText().toString(), Menu, Year, Month, Day);
             databaseReference.child(Name.getText().toString()).push().setValue(info);
 
             Toast.makeText(getApplicationContext(), "채팅방이 생성되었습니다.", Toast.LENGTH_SHORT).show();
@@ -209,5 +212,15 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+    }
+
+    public void getDate() {
+
+        String date = Date.getText().toString();
+        String[] dateString = date.split("/");
+
+        Year = Integer.valueOf(dateString[0]);
+        Month = Integer.valueOf(dateString[1]);
+        Day = Integer.valueOf(dateString[2]);
     }
 }
