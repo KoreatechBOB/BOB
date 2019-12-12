@@ -29,11 +29,12 @@ import java.io.InputStreamReader;
 public class ChatLobbyActivity extends AppCompatActivity {
 
     String User_Name;
+    boolean searchList;
 
     Button Create, Search;
 
     ListView Room_List;
-    ArrayAdapter<String> m_Adapter;
+    ArrayAdapter<String> m_Adapter, s_Adapter;
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -45,13 +46,8 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
         String line;
 
-        m_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        Room_List = findViewById(R.id.chat_room_list);
-        Room_List.setAdapter(m_Adapter);
-        Room_List.setOnItemClickListener(onListItemClick);
-
-        ShowChatList();
-        MakeRoomList();
+        Intent intent = getIntent();
+        searchList = getIntent().getBooleanExtra("Search", false);
 
         try {
             FileInputStream fis = openFileInput("Login.txt");
@@ -67,6 +63,20 @@ public class ChatLobbyActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Toast.makeText(getApplicationContext(), User_Name, Toast.LENGTH_SHORT).show();
+
+        m_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        s_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        Room_List = findViewById(R.id.chat_room_list);
+
+        if(!searchList) {
+            Room_List.setAdapter(m_Adapter);
+            ShowMyChatList();
+        }
+        else {
+            Room_List.setAdapter(s_Adapter);
+            ShowChatList();
+        }
+        Room_List.setOnItemClickListener(onListItemClick);
 
         Create = findViewById(R.id.chat_create);
         Search = findViewById(R.id.chat_search);
@@ -91,7 +101,39 @@ public class ChatLobbyActivity extends AppCompatActivity {
         databaseReference.child("Room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
-                m_Adapter.add(dataSnapshot.getKey());
+                s_Adapter.add(dataSnapshot.getKey());
+                Room_List.setSelection(m_Adapter.getCount() - 1);
+            }
+
+            @Override
+            public void onChildChanged( DataSnapshot dataSnapshot,  String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved( DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved( DataSnapshot dataSnapshot,  String s) {
+
+            }
+
+            @Override
+            public void onCancelled( DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void ShowMyChatList() {
+
+        databaseReference.child("User").child(User_Name).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
+                if(!dataSnapshot.hasChild("name"))
+                    m_Adapter.add(dataSnapshot.getValue(String.class));
                 Room_List.setSelection(m_Adapter.getCount() - 1);
             }
 
@@ -149,20 +191,5 @@ public class ChatLobbyActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChatRoomSearchActivity.class);
         intent.putExtra("UserName", User_Name);
         startActivity(intent);
-    }
-
-    private void MakeRoomList() {
-        try {
-            FileOutputStream fos = openFileOutput("RoomList.txt", MODE_PRIVATE);
-            for(int i = 0; i < m_Adapter.getCount(); i++) {
-                fos.write(m_Adapter.getItem(i).getBytes());
-                fos.write("\n".getBytes());
-            }
-            fos.close();
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
-
     }
 }
