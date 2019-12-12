@@ -79,21 +79,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="시"
+                android:text="시 이후"
                 android:textSize="20sp"
                 android:layout_marginRight="50sp"/>
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                android:id="@+id/room_min"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="분"
-                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -158,9 +146,9 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="생성"
+                android:text="검색"
                 android:textSize="20sp"
-                android:id="@+id/room_create"
+                android:id="@+id/room_search"
                 android:layout_marginRight="50sp"/>
 
             <Button

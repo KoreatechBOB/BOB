@@ -22,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -31,7 +30,10 @@ public class ChatLobbyActivity extends AppCompatActivity {
     String User_Name;
     boolean searchList;
 
-    Button Create, Search;
+    String Place, Menu;
+    int Year, Month, Day, Age_Start, Age_End, Hour;
+
+    Button Create, Search, Mine;
 
     ListView Room_List;
     ArrayAdapter<String> m_Adapter, s_Adapter;
@@ -48,6 +50,17 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         searchList = getIntent().getBooleanExtra("Search", false);
+
+        if(searchList) {
+            Place = intent.getStringExtra("Place");
+            Menu = intent.getStringExtra("Menu");
+            Year = intent.getIntExtra("Year", 1);
+            Month = intent.getIntExtra("Month", 1);
+            Day = intent.getIntExtra("Day", 1);
+            Age_Start = intent.getIntExtra("Age_Start", 1);
+            Age_End = intent.getIntExtra("Age_End", 1);
+            ShowChatList();
+        }
 
         try {
             FileInputStream fis = openFileInput("Login.txt");
@@ -68,18 +81,19 @@ public class ChatLobbyActivity extends AppCompatActivity {
         s_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         Room_List = findViewById(R.id.chat_room_list);
 
-        if(!searchList) {
+        ShowMyChatList();
+
+        if(!searchList)
             Room_List.setAdapter(m_Adapter);
-            ShowMyChatList();
-        }
         else {
             Room_List.setAdapter(s_Adapter);
-            ShowChatList();
         }
+
         Room_List.setOnItemClickListener(onListItemClick);
 
         Create = findViewById(R.id.chat_create);
         Search = findViewById(R.id.chat_search);
+        Mine = findViewById(R.id.chat_my_list);
 
         Create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +105,14 @@ public class ChatLobbyActivity extends AppCompatActivity {
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ActivateSearch();
+                ActivateSearch();
+            }
+        });
+
+        Mine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Room_List.setAdapter(m_Adapter);
             }
         });
     }
@@ -101,7 +122,13 @@ public class ChatLobbyActivity extends AppCompatActivity {
         databaseReference.child("Room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
-                s_Adapter.add(dataSnapshot.getKey());
+                if(dataSnapshot.child("place").getValue(String.class).equals(Place) && dataSnapshot.child("menu").getValue(String.class).equals(Menu) && Integer.valueOf(dataSnapshot.child("ageStart").getValue(String.class)) < Age_Start && Integer.valueOf(dataSnapshot.child("ageEnd").getValue(String.class)) > Age_End) {
+                    if(dataSnapshot.child("year").getValue(Integer.class) > Year || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) > Month) || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) == Month && dataSnapshot.child("day").getValue(Integer.class) >= Day)) {
+                        if((dataSnapshot.child("day").getValue(Integer.class) == Day && Integer.valueOf(dataSnapshot.child("hour").getValue(String.class)) >= Hour) || (dataSnapshot.child("day").getValue(Integer.class) > Day)) {
+                            s_Adapter.add(dataSnapshot.getKey());
+                        }
+                    }
+                }
                 Room_List.setSelection(m_Adapter.getCount() - 1);
             }
 
@@ -185,11 +212,15 @@ public class ChatLobbyActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChatRoomCreateActivity.class);
         intent.putExtra("UserName", User_Name);
         startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
-    private void ActiviateSearch() {
+    private void ActivateSearch() {
         Intent intent = new Intent(this, ChatRoomSearchActivity.class);
         intent.putExtra("UserName", User_Name);
         startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 }

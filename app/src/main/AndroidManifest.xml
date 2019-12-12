@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".ui.ChatList.ChatLobbyActivity"
-            android:label="ChatList">
+            android:label="채팅방">
         </activity>
         <activity
             android:name=".ui.ChatList.ChatRoomActivity"
@@ -44,6 +44,10 @@
         <activity
             android:name=".ui.Rating.RatingActivity"
             android:label="Rating">
+        </activity>
+        <activity
+            android:name=".ui.ChatList.ChatRoomSearchActivity"
+            android:label="검색">
         </activity>
     </application>
 
