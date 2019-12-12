@@ -17,14 +17,22 @@
             android:text="생성"
             android:textSize="20dp"
             android:id="@+id/chat_create"
-            android:layout_marginRight="50dp"/>
+            android:layout_marginRight="25dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="조회"
             android:textSize="20dp"
-            android:id="@+id/chat_search"/>
+            android:id="@+id/chat_search"
+            android:layout_marginRight="25dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내 채팅"
+            android:textSize="20dp"
+            android:id="@+id/chat_my_list"/>
 
     </LinearLayout>
 
@@ -32,6 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/chat_room_list"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:scrollbars="vertical"
+        android:transcriptMode="alwaysScroll"/>
 
 </LinearLayout>
