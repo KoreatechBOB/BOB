@@ -230,7 +230,10 @@ public class ChatLobbyActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Select_Room = parent.getItemAtPosition(position).toString();
-            databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+            if (databaseReferenceUser.child(User_Name).child("ChatRoom").orderByChild(Select_Room) == null)
+                databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+            if (databaseReference.child("Room").child(Select_Room).orderByChild(Select_Room) == null)
+                databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
             ActivateRoom(parent.getItemAtPosition(position).toString());
         }
     };

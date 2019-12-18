@@ -218,6 +218,7 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
         intent.putExtra("UserName", User_Name);
         intent.putExtra("RoomName", Name.getText().toString());
 
+        databaseReference.child(Name.getText().toString()).push().setValue(User_Name);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
