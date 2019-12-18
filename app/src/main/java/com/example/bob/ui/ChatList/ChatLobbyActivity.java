@@ -136,15 +136,12 @@ public class ChatLobbyActivity extends AppCompatActivity {
                 for(DataSnapshot room : dataSnapshot.getChildren()) {
                     if(room.getValue().getClass().equals(java.util.HashMap.class)) {
                         info = room.getValue(ChatRoomDTO.class);
-                        s_Adapter.add(info.getName());
-/*
+                        //s_Adapter.add(info.getName());
                         if(info.getPlace().equals(Place) && info.getMenu().equals(Menu) && Integer.valueOf(info.getAgeStart()) == Age_Start && Integer.valueOf(info.getAgeEnd()) == Age_End) {
-                            if(info.getYear() > Year || (info.getYear() == Year && info.getMonth() > Month) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() > info.getDay())) {
-                                s_Adapter.add(info.getName());
+                            if(info.getYear() > Year || (info.getYear() == Year && info.getMonth() > Month) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() > Day)) {
+                            s_Adapter.add(info.getName());
                             }
                         }
-
- */
                     }
                 }
                 Room_List.setSelection(s_Adapter.getCount() - 1);
@@ -231,14 +228,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Select_Room = parent.getItemAtPosition(position).toString();
-            /*
-            if (databaseReferenceUser.child(User_Name).child("ChatRoom").)
-                databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
-            else
-                Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
-            if (databaseReference.child("Room").child(Select_Room).orderByChild(Select_Room) == null)
-                databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
-             */
             databaseReferenceUser.addListenerForSingleValueEvent(AddChatRoom);
             databaseReference.addListenerForSingleValueEvent(AddUserRoom);
             ActivateRoom(parent.getItemAtPosition(position).toString());
