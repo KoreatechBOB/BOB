@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         pass = findViewById(R.id.login_pass);
         login = findViewById(R.id.login);
         regi = findViewById(R.id.login_register);
-        /*
+
         try {
             FileInputStream fis = openFileInput("Login.txt");
             DataInputStream in = new DataInputStream(fis);
@@ -56,8 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         catch (IOException e) {
             e.printStackTrace();
         }
-
-         */
 
         regi.setOnClickListener(new View.OnClickListener() {
             @Override
