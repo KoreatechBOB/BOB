@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +47,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Chat_Enter = findViewById(R.id.chat_enter);
         Chat_Send = findViewById(R.id.chat_send);
+      
         Intent intent = getIntent();
         User_Name = intent.getStringExtra("UserName");
         Room_Name = intent.getStringExtra("RoomName");
@@ -168,6 +171,33 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        databaseReference.getParent().child("Room").child(Room_Name).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(dataSnapshot.getChildrenCount() == 0)
+                    uname.add(dataSnapshot.getValue().toString());
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        for(int i=0; i<uname.size(); i++) {
+            databaseReference.getParent().child("User").child(User_Name).child("evaluation").child(Room_Name).push().setValue(uname.get(i));
+        }
 
         finish();
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
