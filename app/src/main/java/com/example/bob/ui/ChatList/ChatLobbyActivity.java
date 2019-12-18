@@ -239,41 +239,51 @@ public class ChatLobbyActivity extends AppCompatActivity {
             if (databaseReference.child("Room").child(Select_Room).orderByChild(Select_Room) == null)
                 databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
              */
-            AddChatRoom();
+            databaseReferenceUser.addListenerForSingleValueEvent(AddChatRoom);
+            databaseReference.addListenerForSingleValueEvent(AddUserRoom);
             ActivateRoom(parent.getItemAtPosition(position).toString());
         }
     };
 
-    private void AddChatRoom() {
-        databaseReferenceUser.child(User_Name).child("ChatRoom").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(!dataSnapshot.getValue().equals("SelectRoom"))
-                    Toast.makeText(getApplicationContext(), "TEST", Toast.LENGTH_SHORT).show();
-                    //databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+    private ValueEventListener AddChatRoom = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
+            for(DataSnapshot info : dataSnapshot.child(User_Name).child("ChatRoom").getChildren()) {
+                if (info.getValue().getClass().equals(String.class) && info.getValue().toString().equals(Select_Room)) {
+                    databaseReferenceUser.removeEventListener(this);
+                    return;
+                }
             }
+            databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+            databaseReferenceUser.removeEventListener(this);
+        }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
 
+        }
+    };
+
+    private ValueEventListener AddUserRoom = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
+            for(DataSnapshot info : dataSnapshot.child("Room").child(Select_Room).getChildren()) {
+                if (info.getValue().getClass().equals(String.class) && info.getValue().toString().equals(User_Name)) {
+                    databaseReference.removeEventListener(this);
+                    return;
+                }
             }
+            databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
+            databaseReference.removeEventListener(this);
+        }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+        }
+    };
 
     private void ActivateRoom(String Room) {
         Intent intent = new Intent(this, ChatRoomActivity.class);
