@@ -4,25 +4,25 @@
 
     <item
         android:id="@+id/button_chatlist"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/chat"
         android:title="ChatList"
         app:showAsAction="always|withText"/>
 
     <item
         android:id="@+id/button_foodstore"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/placeholder"
         android:title="FoodStore"
         app:showAsAction="always|withText"/>
 
     <item
         android:id="@+id/button_rating"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/star"
         android:title="Rating"
         app:showAsAction="always|withText"/>
 
     <item
         android:id="@+id/button_userinfo"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/user"
         android:title="UserInfo"
         app:showAsAction="always|withText"/>
 
