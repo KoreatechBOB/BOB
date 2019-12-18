@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -28,6 +29,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.bob.R;
+import com.example.bob.ui.Rating.RatingActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -148,6 +150,29 @@ public class FoodStoreActivity extends AppCompatActivity
         listview.setOnItemClickListener(onClickListItem);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch(item.getItemId()) {
+            case R.id.button_foodstore :
+                intent = new Intent(this, FoodStoreActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.button_rating :
+                intent = new Intent(this, RatingActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     // List onClick Listener
     private AdapterView.OnItemClickListener onClickListItem = new AdapterView.OnItemClickListener() {
@@ -643,11 +668,6 @@ public class FoodStoreActivity extends AppCompatActivity
 
                 break;
         }
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
 }
