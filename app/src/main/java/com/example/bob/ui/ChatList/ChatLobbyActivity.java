@@ -9,15 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
-import com.example.bob.RegisterDTO;
 import com.example.bob.ui.FoodStore.FoodStoreActivity;
 import com.example.bob.ui.Rating.RatingActivity;
 import com.google.firebase.database.ChildEventListener;
@@ -32,7 +29,6 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Iterator;
 
 public class ChatLobbyActivity extends AppCompatActivity {
 
@@ -71,6 +67,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
             Day = intent.getIntExtra("Day", 1);
             Age_Start = intent.getIntExtra("Age_Start", 1);
             Age_End = intent.getIntExtra("Age_End", 1);
+            Hour = intent.getIntExtra("Hour", 0);
             ShowChatList();
         }
 
@@ -136,9 +133,8 @@ public class ChatLobbyActivity extends AppCompatActivity {
                 for(DataSnapshot room : dataSnapshot.getChildren()) {
                     if(room.getValue().getClass().equals(java.util.HashMap.class)) {
                         info = room.getValue(ChatRoomDTO.class);
-                        //s_Adapter.add(info.getName());
                         if(info.getPlace().equals(Place) && info.getMenu().equals(Menu) && Integer.valueOf(info.getAgeStart()) == Age_Start && Integer.valueOf(info.getAgeEnd()) == Age_End) {
-                            if(info.getYear() > Year || (info.getYear() == Year && info.getMonth() > Month) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() > Day)) {
+                            if(info.getYear() > Year || (info.getYear() == Year && info.getMonth() > Month) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() > Day) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() == Day && Integer.valueOf(info.getHour()) > Hour)) {
                             s_Adapter.add(info.getName());
                             }
                         }
