@@ -8,10 +8,9 @@ public class ChatRoomDTO {
     String ageStart, ageEnd;
     String menu;
     int year, month, day;
-    float rating;
 
     public ChatRoomDTO() {}
-    public ChatRoomDTO(String name, String place, String hour, String min, String ageStart, String ageEnd, String menu, int year, int month, int day, float rating) {
+    public ChatRoomDTO(String name, String place, String hour, String min, String ageStart, String ageEnd, String menu, int year, int month, int day) {
         this.name = name;
         this.place = place;
         this.hour = hour;
@@ -22,7 +21,6 @@ public class ChatRoomDTO {
         this.year = year;
         this.month = month;
         this.day = day;
-        this.rating = rating;
     }
 
     public String getName() {
@@ -103,14 +101,6 @@ public class ChatRoomDTO {
 
     public void setDay(int day) {
         this.day = day;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
 }
