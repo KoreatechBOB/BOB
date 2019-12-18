@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
@@ -30,6 +31,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ChatLobbyActivity extends AppCompatActivity {
@@ -241,6 +243,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
                 databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
             if (databaseReference.child("Room").child(Select_Room).orderByChild(Select_Room) == null)
                 databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
+
             ActivateRoom(parent.getItemAtPosition(position).toString());
         }
     };
