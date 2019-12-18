@@ -93,14 +93,13 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Name.getText().toString().equals("") || Hour.equals("") || Place.equals("") || Menu.equals("") || Date.getText().toString().equals("") || Age_Start.getText().toString().equals("") || Age_End.getText().toString().equals(""))
+                if(Hour.equals("") || Place.equals("") || Menu.equals("") || Date.getText().toString().equals("") || Age_Start.getText().toString().equals("") || Age_End.getText().toString().equals(""))
                     Toast.makeText(getApplicationContext(), "빈 칸이 있습니다.", Toast.LENGTH_SHORT).show();
                 else if(Integer.valueOf(Age_Start.getText().toString()) > Integer.valueOf(Age_End.getText().toString()))
                     Toast.makeText(getApplicationContext(), "나이 제한이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
                 else {
                     getDate();
                     SearchRoom();
-                    finish();
                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 }
             }

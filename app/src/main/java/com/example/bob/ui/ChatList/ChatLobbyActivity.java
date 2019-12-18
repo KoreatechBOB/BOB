@@ -31,10 +31,11 @@ import java.io.InputStreamReader;
 public class ChatLobbyActivity extends AppCompatActivity {
 
     String User_Name;
+    String Select_Room;
     boolean searchList;
 
-    String Place, Menu;
-    int Year, Month, Day, Age_Start, Age_End, Hour;
+    String Place = "", Menu = "";
+    int Year = 0, Month = 0, Day = 0, Age_Start = 0, Age_End = 0, Hour = 0;
 
     Button Create, Search, Mine;
 
@@ -43,6 +44,8 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
+    DatabaseReference databaseReferenceUser = firebaseDatabase.getReference("User");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +73,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
             DataInputStream in = new DataInputStream(fis);
             BufferedReader fin = new BufferedReader(new InputStreamReader(in));
 
-            line = fin.readLine();  // 이메일
-            line = fin.readLine();  // 이름
-            line = fin.readLine();  // 닉네임
+            line = fin.readLine();  // 아이디
             User_Name = line;
         }
         catch (IOException e) {
@@ -125,14 +126,27 @@ public class ChatLobbyActivity extends AppCompatActivity {
         databaseReference.child("Room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
-                if(dataSnapshot.child("place").getValue(String.class).equals(Place) && dataSnapshot.child("menu").getValue(String.class).equals(Menu) && Integer.valueOf(dataSnapshot.child("ageStart").getValue(String.class)) < Age_Start && Integer.valueOf(dataSnapshot.child("ageEnd").getValue(String.class)) > Age_End) {
+                /*
+                if(dataSnapshot.child("place").getValue(String.class).equals(Place) && dataSnapshot.child("menu").getValue(String.class).equals(Menu) && Integer.valueOf(dataSnapshot.child("ageStart").getValue(String.class)) <= Age_Start && Integer.valueOf(dataSnapshot.child("ageEnd").getValue(String.class)) >= Age_End) {
                     if(dataSnapshot.child("year").getValue(Integer.class) > Year || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) > Month) || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) == Month && dataSnapshot.child("day").getValue(Integer.class) >= Day)) {
                         if((dataSnapshot.child("day").getValue(Integer.class) == Day && Integer.valueOf(dataSnapshot.child("hour").getValue(String.class)) >= Hour) || (dataSnapshot.child("day").getValue(Integer.class) > Day)) {
                             s_Adapter.add(dataSnapshot.getKey());
                         }
                     }
                 }
-                Room_List.setSelection(m_Adapter.getCount() - 1);
+                */
+
+                if(Place.equals("") || Menu.equals(""))
+                    return;
+
+                ChatRoomDTO checkRoom = dataSnapshot.getValue(ChatRoomDTO.class);
+
+                if(checkRoom.getPlace().equals(Place) && checkRoom.getMenu().equals(Menu))
+                    if(Integer.valueOf(checkRoom.getAgeStart()) <= Age_Start && Integer.valueOf(checkRoom.getAgeEnd()) >= Age_End)
+                        if((checkRoom.getYear() > Year) || (checkRoom.getYear() == Year && checkRoom.getMonth() > Month) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() > Day) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() == Day && Integer.valueOf(checkRoom.getHour()) > Hour))
+                            s_Adapter.add(dataSnapshot.getKey());
+
+                Room_List.setSelection(s_Adapter.getCount() - 1);
             }
 
             @Override
@@ -159,7 +173,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
     private void ShowMyChatList() {
 
-        databaseReference.child("User").child(User_Name).addChildEventListener(new ChildEventListener() {
+        databaseReference.child("User").child(User_Name).child("ChatRoom").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
                 if(!dataSnapshot.hasChild("name"))
@@ -215,6 +229,11 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Select_Room = parent.getItemAtPosition(position).toString();
+            if (databaseReferenceUser.child(User_Name).child("ChatRoom").orderByChild(Select_Room) == null)
+                databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+            if (databaseReference.child("Room").child(Select_Room).orderByChild(Select_Room) == null)
+                databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
             ActivateRoom(parent.getItemAtPosition(position).toString());
         }
     };
@@ -231,7 +250,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChatRoomCreateActivity.class);
         intent.putExtra("UserName", User_Name);
         startActivity(intent);
-        finish();
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
@@ -239,7 +257,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChatRoomSearchActivity.class);
         intent.putExtra("UserName", User_Name);
         startActivity(intent);
-        finish();
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 }

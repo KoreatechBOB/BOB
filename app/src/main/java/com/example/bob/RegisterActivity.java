@@ -56,41 +56,6 @@ public class RegisterActivity extends AppCompatActivity {
                 else {
                     databaseReference.addListenerForSingleValueEvent(checkRegister);
                 }
-                    /*
-                    try{
-                        // 임시로 모든 회원들의 개인정보는 어플에 저장되어있음
-                        // 보안상 절대 해서는 안되는 일이지만 테스트용이므로 일단 진행
-
-                        FileOutputStream fos = openFileOutput("User.txt", MODE_APPEND);
-
-                        fos.write(email.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
-                        fos.write(pass.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
-                        fos.write(name.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
-                        fos.write(nick.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
-                        fos.write(year.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
-                        fos.write(month.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
-                        fos.write(day.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
-
-                        if(isMale == 1)
-                            fos.write("Male".getBytes());
-                        else if(isMale == 2)
-                            fos.write("Female".getBytes());
-                        fos.write("\n".getBytes());
-                        fos.write(comment.getText().toString().getBytes());
-
-                        fos.close();
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                     */
             }
         });
 
@@ -131,8 +96,8 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
             }
-            RegisterDTO info = new RegisterDTO(id.getText().toString(), pass.getText().toString(), name.getText().toString(), nick.getText().toString(), year.getText().toString(), month.getText().toString(), day.getText().toString(), (isMale==1)?"Male":"Female", comment.getText().toString(), 0, 0);
-            databaseReference.child(id.getText().toString()).push().setValue(info); // toString 안붙이면 DTO형식으로 생성됨
+            RegisterDTO info = new RegisterDTO(id.getText().toString(), pass.getText().toString(), name.getText().toString(), nick.getText().toString(), year.getText().toString(), month.getText().toString(), day.getText().toString(), (isMale==1)?"Male":"Female", comment.getText().toString());
+            databaseReference.child(id.getText().toString()).push().setValue(info);
 
             Toast.makeText(getApplicationContext(), "회원가입이 완료되었습니다. 다시 로그인하시기 바랍니다.", Toast.LENGTH_SHORT).show();
             ActivateLogin();

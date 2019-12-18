@@ -93,6 +93,7 @@
                 android:singleLine="true"
                 android:inputType="number"
                 android:id="@+id/birth_year"
+                android:maxLength="4"
                 android:layout_marginRight="20dp"/>
 
             <TextView
@@ -109,6 +110,7 @@
                 android:singleLine="true"
                 android:inputType="number"
                 android:id="@+id/birth_month"
+                android:maxLength="2"
                 android:layout_marginRight="20dp"/>
 
             <TextView
@@ -124,7 +126,8 @@
                 android:textSize="20dp"
                 android:singleLine="true"
                 android:inputType="number"
-                android:id="@+id/birth_day"/>
+                android:id="@+id/birth_day"
+                android:maxLength="2"/>
 
         </LinearLayout>
 
