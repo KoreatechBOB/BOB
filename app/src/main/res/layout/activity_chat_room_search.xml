@@ -105,6 +105,7 @@
                 android:id="@+id/room_age_start"
                 android:inputType="number"
                 android:hint="00"
+                android:maxLength="2"
                 android:layout_marginRight="50sp"/>
 
             <TextView
@@ -119,7 +120,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/room_age_end"
                 android:inputType="number"
-                android:hint="00"/>
+                android:hint="00"
+                android:maxLength="2"/>
 
         </LinearLayout>
 

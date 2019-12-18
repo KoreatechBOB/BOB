@@ -9,9 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
@@ -83,7 +85,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
         catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(getApplicationContext(), User_Name, Toast.LENGTH_SHORT).show();
 
         m_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         s_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -130,33 +131,23 @@ public class ChatLobbyActivity extends AppCompatActivity {
         databaseReference.child("Room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
-                Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
+                ChatRoomDTO info;
 
-                while(child.hasNext()) {
-                    ChatRoomDTO info = child.next().child(child.next().getKey()).getValue(ChatRoomDTO.class);
-                    if (Place.equals(info.getPlace())) {
-                        int count = s_Adapter.getCount();
-                        for (int i = 0; i < count; i++) {
-                            if (s_Adapter.getItem(count).equals(info.getName()))
-                                return;
+                for(DataSnapshot room : dataSnapshot.getChildren()) {
+                    if(room.getValue().getClass().equals(java.util.HashMap.class)) {
+                        info = room.getValue(ChatRoomDTO.class);
+                        s_Adapter.add(info.getName());
+/*
+                        if(info.getPlace().equals(Place) && info.getMenu().equals(Menu) && Integer.valueOf(info.getAgeStart()) == Age_Start && Integer.valueOf(info.getAgeEnd()) == Age_End) {
+                            if(info.getYear() > Year || (info.getYear() == Year && info.getMonth() > Month) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() > info.getDay())) {
+                                s_Adapter.add(info.getName());
+                            }
                         }
-                        s_Adapter.add(info.getPlace());
+
+ */
                     }
                 }
                 Room_List.setSelection(s_Adapter.getCount() - 1);
-                /*
-                if(checkRoom.getPlace().equals(Place) && checkRoom.getMenu().equals(Menu))
-                    if(Integer.valueOf(checkRoom.getAgeStart()) <= Age_Start && Integer.valueOf(checkRoom.getAgeEnd()) >= Age_End)
-                        if((checkRoom.getYear() > Year) || (checkRoom.getYear() == Year && checkRoom.getMonth() > Month) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() > Day) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() == Day && Integer.valueOf(checkRoom.getHour()) > Hour))
-                            s_Adapter.add(dataSnapshot.getKey());
-
-
-                if(checkRoom.getPlace().equals(Place))
-                    if()
-
-                Room_List.setSelection(s_Adapter.getCount() - 1);
-                */
-
             }
 
             @Override
@@ -240,13 +231,49 @@ public class ChatLobbyActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Select_Room = parent.getItemAtPosition(position).toString();
-            if (databaseReferenceUser.child(User_Name).child("ChatRoom").orderByChild(Select_Room) == null)
+            /*
+            if (databaseReferenceUser.child(User_Name).child("ChatRoom").)
                 databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+            else
+                Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
             if (databaseReference.child("Room").child(Select_Room).orderByChild(Select_Room) == null)
                 databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
+             */
+            AddChatRoom();
             ActivateRoom(parent.getItemAtPosition(position).toString());
         }
     };
+
+    private void AddChatRoom() {
+        databaseReferenceUser.child(User_Name).child("ChatRoom").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(!dataSnapshot.getValue().equals("SelectRoom"))
+                    Toast.makeText(getApplicationContext(), "TEST", Toast.LENGTH_SHORT).show();
+                    //databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     private void ActivateRoom(String Room) {
         Intent intent = new Intent(this, ChatRoomActivity.class);
