@@ -213,10 +213,20 @@ public class ChatLobbyActivity extends AppCompatActivity {
             case R.id.button_foodstore :
                 intent = new Intent(this, FoodStoreActivity.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
             case R.id.button_rating :
                 intent = new Intent(this, RatingActivity.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
+            case R.id.button_userinfo :
+                intent = new Intent(this, ChatUserProfile.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -236,7 +246,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
     private ValueEventListener AddChatRoom = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
             for(DataSnapshot info : dataSnapshot.child(User_Name).child("ChatRoom").getChildren()) {
                 if (info.getValue().getClass().equals(String.class) && info.getValue().toString().equals(Select_Room)) {
                     databaseReferenceUser.removeEventListener(this);
@@ -256,7 +265,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
     private ValueEventListener AddUserRoom = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
             for(DataSnapshot info : dataSnapshot.child("Room").child(Select_Room).getChildren()) {
                 if (info.getValue().getClass().equals(String.class) && info.getValue().toString().equals(User_Name)) {
                     databaseReference.removeEventListener(this);

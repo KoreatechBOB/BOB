@@ -10,6 +10,7 @@ public class ChatRoomDTO {
     int year, month, day;
 
     public ChatRoomDTO() {}
+
     public ChatRoomDTO(String name, String place, String hour, String min, String ageStart, String ageEnd, String menu, int year, int month, int day) {
         this.name = name;
         this.place = place;
@@ -102,5 +103,4 @@ public class ChatRoomDTO {
     public void setDay(int day) {
         this.day = day;
     }
-
 }

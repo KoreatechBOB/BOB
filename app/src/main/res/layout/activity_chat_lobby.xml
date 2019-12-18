@@ -3,27 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:background="#EFEDE3">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="10sp">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="생성"
             android:textSize="20dp"
+            android:background="@drawable/custom_button"
             android:id="@+id/chat_create"
             android:layout_marginRight="25dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="조회"
+            android:text="검색"
             android:textSize="20dp"
+            android:background="@drawable/custom_button"
             android:id="@+id/chat_search"
             android:layout_marginRight="25dp"/>
 
@@ -32,6 +35,7 @@
             android:layout_height="wrap_content"
             android:text="내 채팅"
             android:textSize="20dp"
+            android:background="@drawable/custom_button"
             android:id="@+id/chat_my_list"/>
 
     </LinearLayout>
@@ -40,8 +44,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/chat_room_list"
+        android:paddingHorizontal="10sp"
         android:layout_marginTop="20dp"
         android:scrollbars="vertical"
-        android:transcriptMode="alwaysScroll"/>
+        android:transcriptMode="alwaysScroll"
+        android:divider="#00000000"/>
 
 </LinearLayout>
