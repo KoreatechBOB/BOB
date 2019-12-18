@@ -47,7 +47,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Chat_Enter = findViewById(R.id.chat_enter);
         Chat_Send = findViewById(R.id.chat_send);
-        Chat_End = findViewById(R.id.chat_end);
+
         Intent intent = getIntent();
         User_Name = intent.getStringExtra("UserName");
         Room_Name = intent.getStringExtra("RoomName");
