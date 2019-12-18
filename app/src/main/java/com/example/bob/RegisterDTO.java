@@ -11,11 +11,9 @@ public class RegisterDTO {
     String day;
     String sex;
     String comment;
-    int point;
-    int num;
 
     public RegisterDTO() {}
-    public RegisterDTO(String id, String pass, String name, String nick, String year, String month, String day, String sex, String comment, int point, int num) {
+    public RegisterDTO(String id, String pass, String name, String nick, String year, String month, String day, String sex, String comment) {
         this.id = id;
         this.pass = pass;
         this.name = name;
@@ -25,8 +23,6 @@ public class RegisterDTO {
         this.day = day;
         this.sex = sex;
         this.comment = comment;
-        this.point = point;
-        this.num = num;
     }
 
     public String getId() {
@@ -99,21 +95,5 @@ public class RegisterDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public int getPoint() {
-        return point;
-    }
-
-    public void setPoint(int point) {
-        this.point = point;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
     }
 }
