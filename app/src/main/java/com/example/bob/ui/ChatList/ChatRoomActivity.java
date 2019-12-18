@@ -1,8 +1,9 @@
 package com.example.bob.ui.ChatList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -10,8 +11,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
@@ -34,7 +33,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     EditText Chat_Enter;
     Button Chat_Send;
-    Button Chat_End;
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference("Chat");
@@ -47,45 +45,12 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Chat_Enter = findViewById(R.id.chat_enter);
         Chat_Send = findViewById(R.id.chat_send);
-        Chat_End = findViewById(R.id.chat_end);
         Intent intent = getIntent();
         User_Name = intent.getStringExtra("UserName");
         Room_Name = intent.getStringExtra("RoomName");
 
         uname = new ArrayList<>();
         openChat(Room_Name);
-
-        Chat_End.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseReference.getParent().child("Room").child(Room_Name).addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        if(dataSnapshot.getChildrenCount() == 0)
-                            uname.add(dataSnapshot.getValue().toString());
-                    }
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                for(int i=0; i<uname.size(); i++) {
-                    databaseReference.getParent().child("User").child(User_Name).child("evaluation").child(Room_Name).push().setValue(uname.get(i));
-                }
-            }
-        });
 
         Chat_Send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,5 +158,19 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chat_room_top, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        finish();
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+        return super.onOptionsItemSelected(item);
     }
 }

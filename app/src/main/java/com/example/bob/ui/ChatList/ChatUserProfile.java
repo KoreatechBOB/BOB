@@ -1,6 +1,9 @@
 package com.example.bob.ui.ChatList;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -8,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
+import com.example.bob.ui.FoodStore.FoodStoreActivity;
+import com.example.bob.ui.Rating.RatingActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -98,6 +103,35 @@ public class ChatUserProfile extends AppCompatActivity{
         );
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch(item.getItemId()) {
+            case R.id.button_chatlist :
+                startActivity(new Intent(this, ChatLobbyActivity.class));
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
+            case R.id.button_foodstore :
+                intent = new Intent(this, FoodStoreActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
+            case R.id.button_rating :
+                intent = new Intent(this, RatingActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

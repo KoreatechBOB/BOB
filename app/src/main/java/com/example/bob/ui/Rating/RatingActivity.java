@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
-import com.example.bob.RegisterDTO;
+import com.example.bob.ui.ChatList.ChatLobbyActivity;
+import com.example.bob.ui.ChatList.ChatUserProfile;
 import com.example.bob.ui.FoodStore.FoodStoreActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,8 +84,6 @@ public class RatingActivity extends AppCompatActivity {
             BufferedReader fin = new BufferedReader(new InputStreamReader(in));
 
             line = fin.readLine();  // 이메일
-            line = fin.readLine();  // 이름
-            line = fin.readLine();  // 닉네임
             User_Name = line;
         }
         catch (IOException e) {
@@ -243,7 +240,6 @@ public class RatingActivity extends AppCompatActivity {
     });
     */
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_menu, menu);
@@ -254,13 +250,22 @@ public class RatingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch(item.getItemId()) {
+            case R.id.button_chatlist :
+                startActivity(new Intent(this, ChatLobbyActivity.class));
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
             case R.id.button_foodstore :
                 intent = new Intent(this, FoodStoreActivity.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
-            case R.id.button_rating :
-                intent = new Intent(this, RatingActivity.class);
+            case R.id.button_userinfo :
+                intent = new Intent(this, ChatUserProfile.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
         return super.onOptionsItemSelected(item);
