@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
+import com.example.bob.RegisterDTO;
 import com.example.bob.ui.FoodStore.FoodStoreActivity;
 import com.example.bob.ui.Rating.RatingActivity;
 import com.google.firebase.database.ChildEventListener;
@@ -21,12 +23,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 
 public class ChatLobbyActivity extends AppCompatActivity {
 
@@ -36,6 +40,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
     String Place = "", Menu = "";
     int Year = 0, Month = 0, Day = 0, Age_Start = 0, Age_End = 0, Hour = 0;
+    float Rating = 0;
 
     Button Create, Search, Mine;
 
@@ -65,6 +70,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
             Day = intent.getIntExtra("Day", 1);
             Age_Start = intent.getIntExtra("Age_Start", 1);
             Age_End = intent.getIntExtra("Age_End", 1);
+            Rating = intent.getFloatExtra("Rating", 0.0f);
             ShowChatList();
         }
 
@@ -136,17 +142,18 @@ public class ChatLobbyActivity extends AppCompatActivity {
                 }
                 */
 
-                if(Place.equals("") || Menu.equals(""))
-                    return;
-
-                ChatRoomDTO checkRoom = dataSnapshot.getValue(ChatRoomDTO.class);
-
+                /*
                 if(checkRoom.getPlace().equals(Place) && checkRoom.getMenu().equals(Menu))
                     if(Integer.valueOf(checkRoom.getAgeStart()) <= Age_Start && Integer.valueOf(checkRoom.getAgeEnd()) >= Age_End)
                         if((checkRoom.getYear() > Year) || (checkRoom.getYear() == Year && checkRoom.getMonth() > Month) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() > Day) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() == Day && Integer.valueOf(checkRoom.getHour()) > Hour))
                             s_Adapter.add(dataSnapshot.getKey());
 
+
+                if(checkRoom.getPlace().equals(Place))
+                    if()
+
                 Room_List.setSelection(s_Adapter.getCount() - 1);
+                */
             }
 
             @Override
@@ -230,8 +237,8 @@ public class ChatLobbyActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Select_Room = parent.getItemAtPosition(position).toString();
-            databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
-            ActivateRoom(parent.getItemAtPosition(position).toString());
+
+            ActivateRoom(Select_Room);
         }
     };
 
