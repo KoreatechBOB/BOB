@@ -26,7 +26,13 @@
             android:rating="1"
             android:stepSize="1"
             android:id="@+id/rating_star"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="전송"
+            android:id="@+id/rating_send"/>
     </LinearLayout>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

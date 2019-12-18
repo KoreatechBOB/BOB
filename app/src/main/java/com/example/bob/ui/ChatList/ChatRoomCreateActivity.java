@@ -36,7 +36,7 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
     Button Create, Cancel, DateButton;
 
     String Hour = "", Min = "", Place = "", Menu = "";
-    int Year, Month, Day;
+    int Year, Month, Day, Rating;
     String User_Name;
     Spinner Hour_Sp, Min_Sp, Place_Sp, Menu_Sp;
 

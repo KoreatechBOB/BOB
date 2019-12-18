@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChatRoomActivity extends AppCompatActivity {
-
     String User_Name;
     String Room_Name;
 
@@ -33,10 +34,12 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     EditText Chat_Enter;
     Button Chat_Send;
+    Button Chat_End;
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference("Chat");
 
+    ArrayList<String> uname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +47,45 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Chat_Enter = findViewById(R.id.chat_enter);
         Chat_Send = findViewById(R.id.chat_send);
-
+        Chat_End = findViewById(R.id.chat_end);
         Intent intent = getIntent();
         User_Name = intent.getStringExtra("UserName");
         Room_Name = intent.getStringExtra("RoomName");
 
+        uname = new ArrayList<>();
         openChat(Room_Name);
+
+        Chat_End.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference.getParent().child("Room").child(Room_Name).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        if(dataSnapshot.getChildrenCount() == 0)
+                            uname.add(dataSnapshot.getValue().toString());
+                    }
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                for(int i=0; i<uname.size(); i++) {
+                    databaseReference.getParent().child("User").child(User_Name).child("evaluation").child(Room_Name).push().setValue(uname.get(i));
+                }
+            }
+        });
 
         Chat_Send.setOnClickListener(new View.OnClickListener() {
             @Override
