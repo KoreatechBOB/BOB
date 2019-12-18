@@ -132,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
             RegisterDTO info = new RegisterDTO(id.getText().toString(), pass.getText().toString(), name.getText().toString(), nick.getText().toString(), year.getText().toString(), month.getText().toString(), day.getText().toString(), (isMale==1)?"Male":"Female", comment.getText().toString(), 0, 0);
-            databaseReference.child(id.getText().toString()).push().setValue(info);
+            databaseReference.child(id.getText().toString()).push().setValue(info); // toString 안붙이면 DTO형식으로 생성됨
 
             Toast.makeText(getApplicationContext(), "회원가입이 완료되었습니다. 다시 로그인하시기 바랍니다.", Toast.LENGTH_SHORT).show();
             ActivateLogin();

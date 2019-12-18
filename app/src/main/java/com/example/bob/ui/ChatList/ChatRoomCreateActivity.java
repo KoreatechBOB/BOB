@@ -189,7 +189,7 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
             getDate();
             ChatRoomDTO info = new ChatRoomDTO(Name.getText().toString(), Place, Hour, Min, Age_Start.getText().toString(), Age_End.getText().toString(), Menu, Year, Month, Day);
             databaseReference.child(Name.getText().toString()).push().setValue(info);
-            databaseReference.getParent().child("User").child(User_Name).push().setValue(Name.getText().toString());
+            databaseReference.getParent().child("User").child(User_Name).push().setValue(Name.getText().toString()); // FireBase에 컨테이너 생성
 
             Toast.makeText(getApplicationContext(), "채팅방이 생성되었습니다.", Toast.LENGTH_SHORT).show();
 
