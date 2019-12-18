@@ -30,7 +30,7 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
     TextView Date;
     Button Search, Cancel, DateButton;
 
-    String Hour = "", Place = "", Menu = "";
+    String Hour = "00", Place = "수원시", Menu = "분식";
     int Year, Month, Day;
     String User_Name;
     Spinner Hour_Sp, Place_Sp, Menu_Sp;
@@ -143,13 +143,13 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         if(parent == Hour_Sp) {
-            Hour = "";
+            Hour = "00";
         }
         else if(parent == Place_Sp) {
-            Place = "";
+            Place = "수원시";
         }
         else if(parent == Menu_Sp) {
-            Menu = "";
+            Menu = "분식";
         }
     }
 
