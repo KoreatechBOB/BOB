@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.bob.R;
+import com.example.bob.ui.ChatList.ChatLobbyActivity;
 import com.example.bob.ui.ChatList.ChatUserProfile;
 import com.example.bob.ui.Rating.RatingActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -162,9 +163,8 @@ public class FoodStoreActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch(item.getItemId()) {
-            case R.id.button_foodstore :
-                intent = new Intent(this, FoodStoreActivity.class);
-                startActivity(intent);
+            case R.id.button_chatlist :
+                startActivity(new Intent(this, ChatLobbyActivity.class));
                 finish();
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
