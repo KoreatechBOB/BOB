@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.bob.R;
+import com.example.bob.ui.ChatList.ChatUserProfile;
 import com.example.bob.ui.Rating.RatingActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -164,10 +165,20 @@ public class FoodStoreActivity extends AppCompatActivity
             case R.id.button_foodstore :
                 intent = new Intent(this, FoodStoreActivity.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
             case R.id.button_rating :
                 intent = new Intent(this, RatingActivity.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                break;
+            case R.id.button_userinfo :
+                intent = new Intent(this, ChatUserProfile.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
         }
         return super.onOptionsItemSelected(item);
