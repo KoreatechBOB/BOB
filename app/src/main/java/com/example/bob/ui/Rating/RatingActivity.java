@@ -57,6 +57,9 @@ public class RatingActivity extends AppCompatActivity {
 
     LinearLayout ll;
 
+    RegisterDTO info;
+
+
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
 
@@ -83,7 +86,8 @@ public class RatingActivity extends AppCompatActivity {
             DataInputStream in = new DataInputStream(fis);
             BufferedReader fin = new BufferedReader(new InputStreamReader(in));
 
-            line = fin.readLine();  // 이메일
+            line = fin.readLine();  // 닉네임
+
             User_Name = line;
         }
         catch (IOException e) {
@@ -92,11 +96,10 @@ public class RatingActivity extends AppCompatActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                DatabaseReference dr = databaseReference.child("User").child(tv.getText().toString()).child("");
+                public void onClick(View v) {
+                DatabaseReference dr = databaseReference.child("User").child(tv.getText().toString());
                 Map<String, Object> updates = new HashMap<>();
-                updates.put("rating", 1);
-
+                updates.put(info.toString() + "/rating", 1);
                 dr.updateChildren(updates);
             }
         });
@@ -106,6 +109,10 @@ public class RatingActivity extends AppCompatActivity {
 
         Rating_List = (ListView)findViewById(R.id.rating_list);
         Rating_List2 = (ListView)findViewById(R.id.rating_list2);
+
+        Rating_List.setVisibility(View.VISIBLE);
+        Rating_List2.setVisibility(View.GONE);
+        ll.setVisibility(View.GONE);
 
         showRoom();
     }
@@ -121,10 +128,6 @@ public class RatingActivity extends AppCompatActivity {
 
                 Rating_List.setOnItemClickListener(onListItemClick1);
                 Rating_List2.setOnItemClickListener(onListItemClick2);
-
-                Rating_List.setVisibility(View.VISIBLE);
-                Rating_List2.setVisibility(View.GONE);
-                ll.setVisibility(View.GONE);
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -207,6 +210,27 @@ public class RatingActivity extends AppCompatActivity {
             Rating_List.setVisibility(View.GONE);
             Rating_List2.setVisibility(View.GONE);
             ll.setVisibility(View.VISIBLE);
+
+            databaseReference.child("User").child(tv.getText().toString()).addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    if (dataSnapshot.getValue().getClass().equals(java.util.HashMap.class) ) {
+                        info = dataSnapshot.getValue(RegisterDTO.class);
+                    }
+                }
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                }
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
         }
     };
     /*
