@@ -32,14 +32,12 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
 
     String Hour = "", Place = "", Menu = "";
     int Year, Month, Day;
-    float Rating;
     String User_Name;
-    Spinner Hour_Sp, Place_Sp, Menu_Sp, Rating_Sp;
+    Spinner Hour_Sp, Place_Sp, Menu_Sp;
 
     String[] Hours = new String[] {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "17", "!8", "19", "20", "21", "22", "23"};
     String[] Places = new String[] {"수원시", "서울시"};
     String[] Menus = new String[] {"분식", "양식"};
-    String[] Ratings = new String[] {"0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0"};
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference("Room");
@@ -62,7 +60,6 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
         Hour_Sp = findViewById(R.id.room_hour);
         Place_Sp = findViewById(R.id.room_place);
         Menu_Sp = findViewById(R.id.room_menu);
-        Rating_Sp = findViewById(R.id.ratingbox);
 
         ArrayAdapter<String> hourAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Hours);
         Hour_Sp.setAdapter(hourAdapter);
@@ -75,10 +72,6 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(this, android. R.layout.simple_spinner_dropdown_item, Menus);
         Menu_Sp.setAdapter(menuAdapter);
         Menu_Sp.setOnItemSelectedListener(this);
-
-        ArrayAdapter<String> ratingAdapter = new ArrayAdapter<String>(this, android. R.layout.simple_spinner_dropdown_item, Ratings);
-        Rating_Sp.setAdapter(ratingAdapter);
-        Rating_Sp.setOnItemSelectedListener(this);
 
         DateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +93,7 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Hour.equals("") || Place.equals("") || Menu.equals("") || Date.getText().toString().equals("") || Age_Start.getText().toString().equals("") || Age_End.getText().toString().equals("") || Rating < 0)
+                if(Hour.equals("") || Place.equals("") || Menu.equals("") || Date.getText().toString().equals("") || Age_Start.getText().toString().equals("") || Age_End.getText().toString().equals(""))
                     Toast.makeText(getApplicationContext(), "빈 칸이 있습니다.", Toast.LENGTH_SHORT).show();
                 else if(Integer.valueOf(Age_Start.getText().toString()) > Integer.valueOf(Age_End.getText().toString()))
                     Toast.makeText(getApplicationContext(), "나이 제한이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
@@ -145,9 +138,6 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
         else if(parent == Menu_Sp) {
             Menu = parent.getItemAtPosition(position).toString();
         }
-        else if(parent == Rating_Sp) {
-            Rating = Float.valueOf(parent.getItemAtPosition(position).toString());
-        }
     }
 
     @Override
@@ -160,9 +150,6 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
         }
         else if(parent == Menu_Sp) {
             Menu = "";
-        }
-        else if(parent == Rating_Sp) {
-            Rating = -1f;
         }
     }
 
@@ -178,7 +165,6 @@ public class ChatRoomSearchActivity extends AppCompatActivity implements Adapter
         intent.putExtra("Year", Year);
         intent.putExtra("Month", Month);
         intent.putExtra("Day", Day);
-        intent.putExtra("Rating", Rating);
 
         startActivity(intent);
         finish();

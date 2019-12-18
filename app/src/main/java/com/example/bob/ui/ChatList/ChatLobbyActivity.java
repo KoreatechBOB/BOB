@@ -40,7 +40,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
     String Place = "", Menu = "";
     int Year = 0, Month = 0, Day = 0, Age_Start = 0, Age_End = 0, Hour = 0;
-    float Rating = 0;
 
     Button Create, Search, Mine;
 
@@ -70,7 +69,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
             Day = intent.getIntExtra("Day", 1);
             Age_Start = intent.getIntExtra("Age_Start", 1);
             Age_End = intent.getIntExtra("Age_End", 1);
-            Rating = intent.getFloatExtra("Rating", 0.0f);
             ShowChatList();
         }
 
@@ -132,16 +130,20 @@ public class ChatLobbyActivity extends AppCompatActivity {
         databaseReference.child("Room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
-                /*
-                if(dataSnapshot.child("place").getValue(String.class).equals(Place) && dataSnapshot.child("menu").getValue(String.class).equals(Menu) && Integer.valueOf(dataSnapshot.child("ageStart").getValue(String.class)) <= Age_Start && Integer.valueOf(dataSnapshot.child("ageEnd").getValue(String.class)) >= Age_End) {
-                    if(dataSnapshot.child("year").getValue(Integer.class) > Year || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) > Month) || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) == Month && dataSnapshot.child("day").getValue(Integer.class) >= Day)) {
-                        if((dataSnapshot.child("day").getValue(Integer.class) == Day && Integer.valueOf(dataSnapshot.child("hour").getValue(String.class)) >= Hour) || (dataSnapshot.child("day").getValue(Integer.class) > Day)) {
-                            s_Adapter.add(dataSnapshot.getKey());
+                Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
+
+                while(child.hasNext()) {
+                    ChatRoomDTO info = child.next().child(child.next().getKey()).getValue(ChatRoomDTO.class);
+                    if (Place.equals(info.getPlace())) {
+                        int count = s_Adapter.getCount();
+                        for (int i = 0; i < count; i++) {
+                            if (s_Adapter.getItem(count).equals(info.getName()))
+                                return;
                         }
+                        s_Adapter.add(info.getPlace());
                     }
                 }
-                */
-
+                Room_List.setSelection(s_Adapter.getCount() - 1);
                 /*
                 if(checkRoom.getPlace().equals(Place) && checkRoom.getMenu().equals(Menu))
                     if(Integer.valueOf(checkRoom.getAgeStart()) <= Age_Start && Integer.valueOf(checkRoom.getAgeEnd()) >= Age_End)
@@ -154,6 +156,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
                 Room_List.setSelection(s_Adapter.getCount() - 1);
                 */
+
             }
 
             @Override
