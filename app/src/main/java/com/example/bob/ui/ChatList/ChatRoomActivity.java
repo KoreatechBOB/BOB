@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -63,6 +64,29 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
+    private AdapterView.OnItemClickListener onClickListItem = new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String nick = "";
+            int tmp=0;
+            if(list.get(position).get("item2")!=null) {
+                nick = list.get(position).get("item2");
+                tmp = 0;
+            }
+            else if (list.get(position).get("item2")==null) {
+                nick = list.get(position).get("item1");
+                tmp = 1;
+            }
+
+            Intent intent;
+            intent = new Intent(view.getContext(), ChatUserProfile.class);
+            intent.putExtra("nickname",nick);
+            intent.putExtra("tmp",tmp);
+            startActivity(intent);
+        }
+    };
+
     private void addMessage(DataSnapshot dataSnapshot) {
         HashMap<String, String> item = new HashMap<String, String>();
         ChatDTO chatDTO = dataSnapshot.getValue(ChatDTO.class);
@@ -104,6 +128,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Chat_List = findViewById(R.id.chat_list);
         m_Adapter = new SimpleAdapter(this, list, R.layout.chat_listview, new String[] {"item1", "item2", "item3", "item4"}, new int[]{R.id.text1, R.id.text2, R.id.text3, R.id.text4});
         Chat_List.setAdapter(m_Adapter);
+        Chat_List.setOnItemClickListener(onClickListItem);
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
         databaseReference.child(Room_Name).addChildEventListener(new ChildEventListener() {

@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
-import com.example.bob.RegisterDTO;
 import com.example.bob.ui.FoodStore.FoodStoreActivity;
 import com.example.bob.ui.Rating.RatingActivity;
 import com.google.firebase.database.ChildEventListener;
@@ -42,7 +41,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
 
     String Place = "", Menu = "";
     int Year = 0, Month = 0, Day = 0, Age_Start = 0, Age_End = 0, Hour = 0;
-    float Rating = 0;
 
     Button Create, Search, Mine;
 
@@ -72,7 +70,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
             Day = intent.getIntExtra("Day", 1);
             Age_Start = intent.getIntExtra("Age_Start", 1);
             Age_End = intent.getIntExtra("Age_End", 1);
-            Rating = intent.getFloatExtra("Rating", 0.0f);
+            Hour = intent.getIntExtra("Hour", 0);
             ShowChatList();
         }
 
@@ -87,7 +85,6 @@ public class ChatLobbyActivity extends AppCompatActivity {
         catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(getApplicationContext(), User_Name, Toast.LENGTH_SHORT).show();
 
         m_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         s_Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -134,28 +131,19 @@ public class ChatLobbyActivity extends AppCompatActivity {
         databaseReference.child("Room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded( DataSnapshot dataSnapshot,  String s) {
-                /*
-                if(dataSnapshot.child("place").getValue(String.class).equals(Place) && dataSnapshot.child("menu").getValue(String.class).equals(Menu) && Integer.valueOf(dataSnapshot.child("ageStart").getValue(String.class)) <= Age_Start && Integer.valueOf(dataSnapshot.child("ageEnd").getValue(String.class)) >= Age_End) {
-                    if(dataSnapshot.child("year").getValue(Integer.class) > Year || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) > Month) || (dataSnapshot.child("year").getValue(Integer.class) == Year && dataSnapshot.child("month").getValue(Integer.class) == Month && dataSnapshot.child("day").getValue(Integer.class) >= Day)) {
-                        if((dataSnapshot.child("day").getValue(Integer.class) == Day && Integer.valueOf(dataSnapshot.child("hour").getValue(String.class)) >= Hour) || (dataSnapshot.child("day").getValue(Integer.class) > Day)) {
-                            s_Adapter.add(dataSnapshot.getKey());
+                ChatRoomDTO info;
+
+                for(DataSnapshot room : dataSnapshot.getChildren()) {
+                    if(room.getValue().getClass().equals(java.util.HashMap.class)) {
+                        info = room.getValue(ChatRoomDTO.class);
+                        if(info.getPlace().equals(Place) && info.getMenu().equals(Menu) && Integer.valueOf(info.getAgeStart()) == Age_Start && Integer.valueOf(info.getAgeEnd()) == Age_End) {
+                            if(info.getYear() > Year || (info.getYear() == Year && info.getMonth() > Month) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() > Day) || (info.getYear() == Year && info.getMonth() == Month && info.getDay() == Day && Integer.valueOf(info.getHour()) > Hour)) {
+                            s_Adapter.add(info.getName());
+                            }
                         }
                     }
                 }
-                */
-
-                /*
-                if(checkRoom.getPlace().equals(Place) && checkRoom.getMenu().equals(Menu))
-                    if(Integer.valueOf(checkRoom.getAgeStart()) <= Age_Start && Integer.valueOf(checkRoom.getAgeEnd()) >= Age_End)
-                        if((checkRoom.getYear() > Year) || (checkRoom.getYear() == Year && checkRoom.getMonth() > Month) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() > Day) || (checkRoom.getYear() == Year && checkRoom.getMonth() == Month && checkRoom.getDay() == Day && Integer.valueOf(checkRoom.getHour()) > Hour))
-                            s_Adapter.add(dataSnapshot.getKey());
-
-
-                if(checkRoom.getPlace().equals(Place))
-                    if()
-
                 Room_List.setSelection(s_Adapter.getCount() - 1);
-                */
             }
 
             @Override
@@ -239,12 +227,49 @@ public class ChatLobbyActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Select_Room = parent.getItemAtPosition(position).toString();
-            if (databaseReferenceUser.child(User_Name).child("ChatRoom").orderByChild(Select_Room) == null)
-                databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
-            if (databaseReference.child("Room").child(Select_Room).orderByChild(Select_Room) == null)
-                databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
-
+            databaseReferenceUser.addListenerForSingleValueEvent(AddChatRoom);
+            databaseReference.addListenerForSingleValueEvent(AddUserRoom);
             ActivateRoom(parent.getItemAtPosition(position).toString());
+        }
+    };
+
+    private ValueEventListener AddChatRoom = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
+            for(DataSnapshot info : dataSnapshot.child(User_Name).child("ChatRoom").getChildren()) {
+                if (info.getValue().getClass().equals(String.class) && info.getValue().toString().equals(Select_Room)) {
+                    databaseReferenceUser.removeEventListener(this);
+                    return;
+                }
+            }
+            databaseReferenceUser.child(User_Name).child("ChatRoom").push().setValue(Select_Room);
+            databaseReferenceUser.removeEventListener(this);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ValueEventListener AddUserRoom = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Toast.makeText(getApplicationContext(), Select_Room, Toast.LENGTH_SHORT).show();
+            for(DataSnapshot info : dataSnapshot.child("Room").child(Select_Room).getChildren()) {
+                if (info.getValue().getClass().equals(String.class) && info.getValue().toString().equals(User_Name)) {
+                    databaseReference.removeEventListener(this);
+                    return;
+                }
+            }
+            databaseReference.child("Room").child(Select_Room).push().setValue(User_Name);
+            databaseReference.removeEventListener(this);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
         }
     };
 

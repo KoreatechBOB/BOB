@@ -63,6 +63,10 @@
             android:name=".ui.ChatList.ChatRoomSearchActivity"
             android:label="검색">
         </activity>
+        <activity
+            android:name=".ui.ChatList.ChatUserProfile"
+            android:label="프로필">
+        </activity>
     </application>
 
 </manifest>
