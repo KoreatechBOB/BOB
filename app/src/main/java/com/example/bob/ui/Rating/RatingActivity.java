@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
+import com.example.bob.RegisterDTO;
 import com.example.bob.ui.ChatList.ChatLobbyActivity;
 import com.example.bob.ui.ChatList.ChatUserProfile;
 import com.example.bob.ui.FoodStore.FoodStoreActivity;
