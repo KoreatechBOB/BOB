@@ -102,5 +102,4 @@ public class ChatRoomDTO {
     public void setDay(int day) {
         this.day = day;
     }
-
 }

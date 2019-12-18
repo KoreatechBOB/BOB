@@ -36,7 +36,7 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
     Button Create, Cancel, DateButton;
 
     String Hour = "", Min = "", Place = "", Menu = "";
-    int Year, Month, Day;
+    int Year, Month, Day, Rating;
     String User_Name;
     Spinner Hour_Sp, Min_Sp, Place_Sp, Menu_Sp;
 
@@ -184,7 +184,7 @@ public class ChatRoomCreateActivity extends AppCompatActivity implements Adapter
             }
             getDate();
 
-            ChatRoomDTO info = new ChatRoomDTO(Name.getText().toString(), Place, Hour, Min, Age_Start.getText().toString(), Age_End.getText().toString(), Menu, Year, Month, Day, Rating);
+            ChatRoomDTO info = new ChatRoomDTO(Name.getText().toString(), Place, Hour, Min, Age_Start.getText().toString(), Age_End.getText().toString(), Menu, Year, Month, Day);
             databaseReference.child(Name.getText().toString()).push().setValue(info);
             databaseReference.child(Name.getText().toString()).push().setValue(User_Name);
             databaseReference.getParent().child("User").child(User_Name).child("ChatRoom").push().setValue(Name.getText().toString());
