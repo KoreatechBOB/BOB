@@ -25,11 +25,13 @@
             android:id="@+id/rating_reason"/>
         <RatingBar
             android:layout_gravity="center"
+            android:isIndicator="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
-            android:rating="1"
+            android:rating="3"
             android:stepSize="1"
+            android:max="5"
             android:id="@+id/rating_star"/>
         <Button
             android:layout_width="match_parent"

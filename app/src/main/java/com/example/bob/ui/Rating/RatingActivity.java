@@ -60,7 +60,7 @@ public class RatingActivity extends AppCompatActivity {
     LinearLayout ll;
 
     RegisterDTO info;
-
+    String keys;
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -96,13 +96,24 @@ public class RatingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                rb.setRating(rating);
+            }
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
                 public void onClick(View v) {
-                DatabaseReference dr = databaseReference.child("User").child(tv.getText().toString());
-                Map<String, Object> updates = new HashMap<>();
-                updates.put(info.toString() + "/rating", 1);
-                dr.updateChildren(updates);
+
+                int numToint = Integer.parseInt(info.getNum()) +1;
+                int ratingToint = Integer.parseInt(info.getRating()) + Math.round(rb.getRating());
+
+                info.setNum(Integer.toString(numToint));
+                info.setRating(Integer.toString(ratingToint));
+                databaseReference.child("User").child(User_Name).child("evaluation").child(tv.getText().toString()).setValue(null);
+                databaseReference.child("User").child(tv.getText().toString()).child(keys).setValue(info);
+
             }
         });
 
@@ -218,6 +229,7 @@ public class RatingActivity extends AppCompatActivity {
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     if (dataSnapshot.getValue().getClass().equals(java.util.HashMap.class) ) {
                         info = dataSnapshot.getValue(RegisterDTO.class);
+                        keys = dataSnapshot.getKey();
                     }
                 }
                 @Override
@@ -235,36 +247,6 @@ public class RatingActivity extends AppCompatActivity {
             });
         }
     };
-    /*
-        databaseReference.child("Room").child(Select_Room).addChildEventListener(new ChildEventListener() {
-        ArrayList<String> childList = new ArrayList<>();
-        @Override
-        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    if (dataSnapshot.getChildrenCount() == 0) {
-                        childList.add(dataSnapshot.getValue().toString());
-                        //databaseReference.child("User").child(dataSnapshot.getValue().toString()).child("evaluation").push().setValue(User_Name);
-                    }
-                    System.out.println(childList.size());
-                    System.out.println(childList);
-
-        }
-        @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        }
-
-        @Override
-        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        }
-
-        @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-        }
-    });
-    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
