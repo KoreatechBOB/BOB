@@ -162,21 +162,19 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.chat_room_top, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
+    private void chat_end() {
         databaseReference.getParent().child("Room").child(Room_Name).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(dataSnapshot.getChildrenCount() == 0)
-                    uname.add(dataSnapshot.getValue().toString());
+                String username;
+                if(dataSnapshot.getChildrenCount() == 0) {
+                    //uname.add(dataSnapshot.getValue().toString());
+                    username = dataSnapshot.getValue().toString();
+                    //System.out.println(dataSnapshot.getValue().toString());
+                    //System.out.println(uname);
+                    //databaseReference.getParent().child("User").child(User_Name).child("evaluation").child(Room_Name).push().setValue(uname.get(i));
+                    databaseReference.getParent().child("User").child(User_Name).child("evaluation").child(Room_Name).push().setValue(username);
+                }
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -198,6 +196,17 @@ public class ChatRoomActivity extends AppCompatActivity {
         for(int i=0; i<uname.size(); i++) {
             databaseReference.getParent().child("User").child(User_Name).child("evaluation").child(Room_Name).push().setValue(uname.get(i));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chat_room_top, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        chat_end();
 
         finish();
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
