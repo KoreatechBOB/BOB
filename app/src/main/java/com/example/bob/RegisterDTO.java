@@ -12,9 +12,10 @@ public class RegisterDTO {
     String sex;
     String comment;
     String rating;
+    String num;
 
     public RegisterDTO() {}
-    public RegisterDTO(String id, String pass, String name, String nick, String year, String month, String day, String sex, String comment, String rating) {
+    public RegisterDTO(String id, String pass, String name, String nick, String year, String month, String day, String sex, String comment, String rating, String num) {
         this.id = id;
         this.pass = pass;
         this.name = name;
@@ -25,6 +26,7 @@ public class RegisterDTO {
         this.sex = sex;
         this.comment = comment;
         this.rating = rating;
+        this.num = num;
     }
 
     public String getId() {
@@ -105,5 +107,13 @@ public class RegisterDTO {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
     }
 }
