@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bob.R;
+import com.example.bob.UserInfoActivity;
 import com.example.bob.ui.FoodStore.FoodStoreActivity;
 import com.example.bob.ui.Rating.RatingActivity;
 import com.google.firebase.database.ChildEventListener;
@@ -223,7 +224,7 @@ public class ChatLobbyActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
             case R.id.button_userinfo :
-                intent = new Intent(this, ChatUserProfile.class);
+                intent = new Intent(this, UserInfoActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);

@@ -1,10 +1,13 @@
 package com.example.bob;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -16,17 +19,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Iterator;
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText name, nick, id, pass, year, month, day, sex, comment;
-
+    ImageView image;
+    Uri selectedImageUri = Uri.parse("");
+    String downloadUrl;
     int isMale = 0;
+    int count =0;
+
+
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference().child("User");
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final int GET_GALLERY_IMAGE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +47,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         Button regi = findViewById(R.id.regi);
         Button cancel = findViewById(R.id.regi_cancel);
+        Button pic = findViewById(R.id.select_pic);
+
+        image = (ImageView)findViewById(R.id.user_image);
 
         name = findViewById(R.id.regi_name);
         nick = findViewById(R.id.regi_nickname);
@@ -45,6 +60,15 @@ public class RegisterActivity extends AppCompatActivity {
         day = findViewById(R.id.birth_day);
         comment = findViewById(R.id.regi_comment);
 
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                startActivityForResult(intent,GET_GALLERY_IMAGE);
+                count++;
+            }
+        });
         regi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +79,11 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else {
                     databaseReference.addListenerForSingleValueEvent(checkRegister);
+                    if(count>0) {
+                        String filename = nick.getText().toString();
+                        final StorageReference storageRef = storage.getReferenceFromUrl("gs://bob-project-5ab9a.appspot.com").child("Writeclassimage/" + filename);
+                        storageRef.putFile(selectedImageUri);
+                    }
                 }
             }
         });
@@ -65,6 +94,16 @@ public class RegisterActivity extends AppCompatActivity {
                 ActivateLogin();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+            image.setImageURI(selectedImageUri);
+
+        }
     }
 
     public void onRadioButtonClick(View view) {

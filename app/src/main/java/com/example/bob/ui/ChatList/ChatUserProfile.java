@@ -1,38 +1,43 @@
 package com.example.bob.ui.ChatList;
 
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.bob.R;
-import com.example.bob.ui.FoodStore.FoodStoreActivity;
-import com.example.bob.ui.Rating.RatingActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 
 public class ChatUserProfile extends AppCompatActivity{
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference("User");
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     TextView Nickname, Sangme;
     RatingBar ratingBar;
     String User_id;
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +48,11 @@ public class ChatUserProfile extends AppCompatActivity{
         String line;
         showProfile();
 
+        image = (ImageView)findViewById(R.id.user_image);
+
         Nickname = findViewById(R.id.user_nick);
         Sangme = findViewById(R.id.user_comment);
+        ratingBar = findViewById(R.id.user_rating);
 
         try {
             FileInputStream fis = openFileInput("Login.txt");
@@ -64,6 +72,7 @@ public class ChatUserProfile extends AppCompatActivity{
     private void showProfile() {
         final String nick = getIntent().getStringExtra("nickname");
         final int tmp = getIntent().getIntExtra("tmp",0);
+
         databaseReference.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -73,7 +82,21 @@ public class ChatUserProfile extends AppCompatActivity{
                                 DataSnapshot data = info.getChildren().iterator().next();
                                 if (nick.equals(data.child("nick").getValue())) {
                                     Nickname.setText(data.child("nick").getValue().toString());
+                                    StorageReference storageRef = storage.getReferenceFromUrl("gs://bob-project-5ab9a.appspot.com").child("Writeclassimage/"+data.child("nick").getValue().toString());
+                                    storageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Uri> task) {
+                                            if(task.isSuccessful()){
+                                                Glide.with(getApplicationContext())
+                                                        .load(task.getResult())
+                                                        .into(image);
+                                            }
+                                        }
+                                    });
+
                                     Sangme.setText(data.child("comment").getValue().toString());
+                                    ratingBar.setRating(Float.parseFloat(data.child("rating").getValue().toString())/Float.parseFloat(data.child("num").getValue().toString()));
+
                                 }
                             }
                             else if(User_id.equals(info.getKey())==true&&tmp==1){
@@ -87,7 +110,19 @@ public class ChatUserProfile extends AppCompatActivity{
                                     DataSnapshot data = info.getChildren().iterator().next();
                                     if (nick.equals(data.child("nick").getValue())) {
                                         Nickname.setText(data.child("nick").getValue().toString());
+                                        StorageReference storageRef = storage.getReferenceFromUrl("gs://bob-project-5ab9a.appspot.com").child("Writeclassimage/"+data.child("nick").getValue().toString());
+                                        storageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Uri> task) {
+                                                if(task.isSuccessful()){
+                                                    Glide.with(getApplicationContext())
+                                                            .load(task.getResult())
+                                                            .into(image);
+                                                }
+                                            }
+                                        });
                                         Sangme.setText(data.child("comment").getValue().toString());
+                                        ratingBar.setRating(Float.parseFloat(data.child("rating").getValue().toString())/Float.parseFloat(data.child("num").getValue().toString()));
                                         break;
                                     }
                                 }
@@ -103,35 +138,6 @@ public class ChatUserProfile extends AppCompatActivity{
         );
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch(item.getItemId()) {
-            case R.id.button_chatlist :
-                startActivity(new Intent(this, ChatLobbyActivity.class));
-                finish();
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                break;
-            case R.id.button_foodstore :
-                intent = new Intent(this, FoodStoreActivity.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                break;
-            case R.id.button_rating :
-                intent = new Intent(this, RatingActivity.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }

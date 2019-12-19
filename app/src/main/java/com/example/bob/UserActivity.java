@@ -27,8 +27,8 @@ public class UserActivity extends AppCompatActivity {
         Button revise, close;
         EditText nick, comment;
 
-        revise = findViewById(R.id.user_revise);
-        close = findViewById(R.id.user_close);
+        // revise = findViewById(R.id.user_revise);
+        //close = findViewById(R.id.user_close);
         nick = findViewById(R.id.user_nick);
         comment = findViewById(R.id.user_comment);
 
@@ -37,20 +37,19 @@ public class UserActivity extends AppCompatActivity {
             DataInputStream in = new DataInputStream(fis);
             BufferedReader fin = new BufferedReader(new InputStreamReader(in));
 
-            for(int i = 0; i < 9; i++) {
+            for (int i = 0; i < 9; i++) {
                 line = fin.readLine();
 
-                if(i == 3)
+                if (i == 3)
                     nick.setText(line);
-                else if(i == 8)
+                else if (i == 8)
                     comment.setText(line);
             }
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
+/*
         revise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +63,14 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-            }
+
         });
+
+
+
+ */
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
