@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.bob.R;
+import com.example.bob.UserInfoActivity;
 import com.example.bob.ui.ChatList.ChatLobbyActivity;
 import com.example.bob.ui.ChatList.ChatUserProfile;
 import com.example.bob.ui.Rating.RatingActivity;
@@ -175,7 +176,7 @@ public class FoodStoreActivity extends AppCompatActivity
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 break;
             case R.id.button_userinfo :
-                intent = new Intent(this, ChatUserProfile.class);
+                intent = new Intent(this, UserInfoActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);

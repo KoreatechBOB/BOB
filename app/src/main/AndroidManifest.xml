@@ -67,6 +67,10 @@
             android:name=".ui.ChatList.ChatUserProfile"
             android:label="프로필">
         </activity>
+        <activity
+            android:name=".UserInfoActivity"
+            android:label="정보수정">
+        </activity>
     </application>
 
 </manifest>

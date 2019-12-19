@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:background="#EFEDE3">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/rating_input">
+        android:id="@+id/rating_input"
+        android:layout_marginHorizontal="30sp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,6 +18,10 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:paddingHorizontal="10sp"
+            android:paddingVertical="10sp"
+            android:background="@drawable/custom_edit"
             android:id="@+id/rating_reason"/>
         <RatingBar
             android:layout_gravity="center"
@@ -30,6 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="전송"
+            android:textSize="20dp"
+            android:background="@drawable/custom_button"
             android:id="@+id/rating_send"/>
     </LinearLayout>
 
